@@ -1,3 +1,5 @@
+{-# OPTIONS -Wall -XBangPatterns #-}
+
 import Data.List
 
 data Section = Section { getA :: Int, getB :: Int, getC :: Int }
@@ -16,7 +18,7 @@ data Label = A | B | C deriving (Show)
 type Path = [(Label, Int)]
 
 roadStep :: (Path, Path) -> Section -> (Path, Path)
-roadStep (pathA, pathB) (Section a b c) =
+roadStep (!pathA, !pathB) (Section a b c) =
     let timeA = foldl' (+) 0 (map snd pathA)
         timeB = foldl' (+) 0 (map snd pathB)
         forwardTimeToA = timeA + a
