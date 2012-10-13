@@ -1,8 +1,5 @@
 import Data.List
 
--- タプルでも同じことができるけれども、
--- 例えば３次元ベクトルと混同することもある
--- 型で多くの情報を表す
 data Section = Section { getA :: Int, getB :: Int, getC :: Int }
     deriving (Show)
 
@@ -28,9 +25,6 @@ roadStep (pathA, pathB) (Section a b c) =
         crossTimeToB = timeA + a + c
         newPathToA = if forwardTimeToA <= crossTimeToA
                         then (A, a):pathA
-                        -- 直感的にpathA ++ (A, a)にしたいところだが…
-                        -- xs ++ ysは、xsを分解して全部(:)でつなげるということをするから遅いんですよね…
-                        -- P138参照
                         else (C, c):(B, b):pathB
         newPathToB = if forwardTimeToB <= crossTimeToB
                         then (B, b):pathB
@@ -56,7 +50,6 @@ main = do
     let threes = groupsOf 3 (map read $ lines contents)
         roadSystem = map (\[a,b,c] -> Section a b c) threes
         path = optimalPath roadSystem
-        -- concat $ map f xsはconcatMap f xsにまとめられます
         pathString = concatMap (show . fst) path
         pathTime = foldl' (+) 0 $ map snd path
     putStrLn $ "The best path to take is: " ++ pathString

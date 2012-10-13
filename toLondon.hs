@@ -1,3 +1,7 @@
+-- タプルでも同じことができるけれども、
+-- 例えば３次元ベクトルと混同することもある
+-- 型で多くの情報を表す
+
 data Section = Section { getA :: Int, getB :: Int, getC :: Int }
     deriving (Show)
 
