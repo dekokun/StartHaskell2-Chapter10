@@ -54,8 +54,138 @@
         </section>
 
         <section data-markdown>
+          ## 逆ポーランド記法電卓
         </section>
 
+        <section data-markdown>
+          ### 逆ポーランド記法(RPN)とは
+          * こんな感じ
+            * "1  2 +" -> 1 + 2
+            * "1  2 + 10 *" -> (1 + 2) * 10
+          * ()が不要ですね。素敵ですね。
+
+        </section>
+
+        <section data-markdown>
+          ### 計算方法
+
+          * 左から右に読む
+          * 数だったらスタックに積む
+          * 演算子だったらスタックから数を取り出し演算し、結果をスタックに積む
+          * 最後にスタックに残った数が答え
+        </section>
+
+        <section data-markdown>
+          ## 実際に自分の頭で計算してみる
+          * "10 4 3 + 2 * -"
+        </section>
+
+        <section data-markdown>
+          ### まずはスタックに10を積む
+          * "10 4 3 + 2 * -"
+          * スタック:10
+        </section>
+
+        <section data-markdown>
+          ### 次のアイテムは4なのでこれも<br>スタックに積む
+          * "4 3 + 2 * -"
+          * スタック:4 10
+        </section>
+        <section data-markdown>
+          ### 次も3なのでスタックに
+          * "3 + 2 * -"
+          * スタック:3 4 10
+        </section>
+
+        <section data-markdown>
+          ### 次は2項演算子なのでスタックから2個取り出して計算し結果をスタックに積む
+          * "+ 2 * -"
+          * 4 + 3 = 7
+          * スタック:7 10
+        </section>
+
+        <section data-markdown>
+          ### 2をスタックに
+          * "2 * -"
+          * スタック:2 7 10
+        </section>
+
+        <section data-markdown>
+          ### 掛け算
+          * "* -"
+          * 7 * 2 = 14
+          * スタック:14 10
+        </section>
+        <section data-markdown>
+          ### 引きましょう
+          * "-"
+          * 10 - 14 = -4
+          * スタック:4
+        </section>
+        <section data-markdown>
+          ### なくなった
+          * ""
+          * スタック:4
+
+          お疲れ様です。答えは4です
+        </section>
+        <section data-markdown>
+          ### RPN関数を作成
+          * まずは型
+          * 文字列をとって数を返す
+          * 倍精度浮動少数で
+          <pre><code contenteditable>
+            solveRPN :: String -> Double
+          </code></pre>
+        </section>
+        <section data-markdown>
+          ### 自分の頭ではどうやったっけ
+          1. スペース区切りの文字列をリストに分割 -> words
+          1. リストを走査しスタックを更新 -> 畳込み
+            * 今回はリストを左から走査するので左畳込み
+          1. スタックはどう表現するか
+            * リストの先頭をスタックの先頭に
+            * リストはリストの先頭の操作が得意ですので、出入りの激しいスタックの先頭をリストの先頭に対応づけましょう
+        </section>
+
+        <section data-markdown>
+          ### 関数の一部
+          
+          <pre><code>
+          solveRPN :: String -> Double
+          solveRPN expression = head (foldl foldingFunction [] (words expression))
+            where foldingFunction stack item = ....
+          </code></pre>
+          
+          * ポイントフリースタイルに向けて書きなおす
+          
+          <pre><code>
+          solveRPN expression = head $ foldl foldingFunction [] $ words expression
+            where foldingFunction stack item = ....
+          </code></pre>
+
+          * 更に↓
+
+          <pre><code>
+          solveRPN expression = head . foldl foldingFunction [] $ words expression
+            where foldingFunction stack item = ....
+          </code></pre>
+
+          * 更に↓
+
+          <pre><code>
+          solveRPN = head . foldl foldingFunction [] . words
+            where foldingFunction stack item = ....
+          </code></pre>
+        </section>
+        <section data-markdown>
+          ### 作ってみよう
+          * 続きはVimで
+        </section>
+        <section data-markdown>
+        </section>
+        <section data-markdown>
+        </section>
         <section>
           <h2>Pretty Code</h2>
           <pre><code contenteditable>
